@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Web Auth Security Monitor
 
 A Laravel-based web application for monitoring login activity and detecting brute-force attacks using IP- and account-based rules.
@@ -45,3 +46,7 @@ php artisan test
 ## Project Status
 
 This project is under active development.
+=======
+# web-auth-security-monitor
+Laravel-based web application for monitoring login activity and detecting brute-force attacks using IP- and account-based rules. Features include authentication logs, security dashboard, rate limiting, temporary IP blocking, notifications, and detection evaluation using precision, recall, and false positive rate.
+>>>>>>> origin/main
