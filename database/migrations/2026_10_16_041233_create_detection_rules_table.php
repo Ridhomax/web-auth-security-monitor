@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedInteger('threshold_count');
             $table->unsignedInteger('window_seconds');
             $table->boolean('is_enabled')->default(true);
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate();
         });
     }
 

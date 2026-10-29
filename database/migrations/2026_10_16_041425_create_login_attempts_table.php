@@ -13,16 +13,19 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')
-                ->nullable()
-                ->constrained('users')
+                ->nullable();
+
+            $table->foreign('user_id', 'fk_login_attempt_user')
+                ->references('id')
+                ->on('users')
                 ->nullOnDelete();
 
-            $table->string('attempted_identifier');
+            $table->string('attempted_identifier', 150);
             $table->string('ip_address', 45);
-            $table->text('user_agent')->nullable();
+            $table->string('user_agent', 500)->nullable();
             $table->boolean('is_successful')->default(false);
-            $table->string('failure_reason')->nullable();
-            $table->timestamp('attempted_at');
+            $table->string('failure_reason', 100)->nullable();
+            $table->timestamp('attempted_at')->useCurrent();
 
             $table->index(
                 ['attempted_identifier', 'attempted_at'],

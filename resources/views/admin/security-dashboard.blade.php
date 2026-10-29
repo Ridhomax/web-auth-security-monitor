@@ -66,6 +66,60 @@
             margin-bottom: 18px;
         }
 
+
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .filter-button,
+        .reset-button {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .filter-button {
+            border: none;
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .reset-button {
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+        }
+
         .table-wrapper {
             overflow-x: auto;
         }
@@ -175,10 +229,71 @@
         </div>
     </section>
 
+
     <section class="card">
         <h2 class="section-title">Kejadian Keamanan Terbaru</h2>
 
+        <form method="GET"
+            action="{{ route('admin.security-dashboard') }}"
+            class="filter-form">
+
+            <div class="filter-group">
+                <label for="status">Status Event</label>
+                <select name="status" id="status">
+                    <option value="">Semua Status</option>
+                    <option value="open"
+                        {{ $status === 'open' ? 'selected' : '' }}>
+                        Open
+                    </option>
+                    <option value="resolved"
+                        {{ $status === 'resolved' ? 'selected' : '' }}>
+                        Resolved
+                    </option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="search">Cari IP Address atau Deskripsi</label>
+                <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    value="{{ $search }}"
+                    placeholder="Contoh: 127.0.0.1 atau brute force"
+                >
+            </div>
+
+            <div class="filter-group">
+                <label for="severity">Tingkat Keparahan</label>
+                <select name="severity" id="severity">
+                    <option value="">Semua Severity</option>
+                    <option value="high"
+                        {{ $severity === 'high' ? 'selected' : '' }}>
+                        High
+                    </option>
+                    <option value="medium"
+                        {{ $severity === 'medium' ? 'selected' : '' }}>
+                        Medium
+                    </option>
+                    <option value="low"
+                        {{ $severity === 'low' ? 'selected' : '' }}>
+                        Low
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="filter-button">
+                Terapkan Filter
+            </button>
+
+            <a href="{{ route('admin.security-dashboard') }}"
+            class="reset-button">
+                Reset
+            </a>
+        </form>
+
         <div class="table-wrapper">
+
             <table>
                 <thead>
                     <tr>
@@ -186,7 +301,9 @@
                         <th>Jenis Kejadian</th>
                         <th>Severity</th>
                         <th>Deskripsi</th>
+                        <th>IP Address</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
 
@@ -198,6 +315,8 @@
                             </td>
 
                             <td>{{ $event->event_type }}</td>
+
+                            <td>{{ $event->loginAttempt?->ip_address ?? '-' }}</td>
 
                             <td>
                                 <span class="badge {{ strtolower($event->severity) }}">
@@ -212,10 +331,15 @@
                                     {{ ucfirst($event->status) }}
                                 </span>
                             </td>
+                            <td>
+                                <a href="{{ route('admin.security-events.show', $event) }}">
+                                    Detail
+                                </a>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="empty">
+                            <td colspan="7" class="empty">
                                 Belum ada kejadian keamanan yang tercatat.
                             </td>
                         </tr>

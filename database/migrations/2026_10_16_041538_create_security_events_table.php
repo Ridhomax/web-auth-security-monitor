@@ -13,22 +13,29 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('login_attempt_id')
-                ->constrained('login_attempts')
-                ->cascadeOnDelete();
+                ->nullable();
+
+            $table->foreign('login_attempt_id', 'fk_event_login_attempt')
+                ->references('id')
+                ->on('login_attempts')
+                ->nullOnDelete();
 
             $table->string('event_type', 100);
-            $table->string('severity', 20);
+            $table->string('severity', 20)->default('medium');
             $table->text('description')->nullable();
             $table->string('status', 30)->default('open');
-            $table->timestamp('detected_at');
+            $table->timestamp('detected_at')->useCurrent();
             $table->timestamp('resolved_at')->nullable();
 
             $table->index(
-                ['event_type', 'status', 'detected_at'],
-                'idx_security_event_type_status_time'
+                ['severity', 'detected_at'],
+                'idx_event_severity_time'
             );
 
-            $table->timestamps();
+            $table->index(
+                ['status', 'detected_at'],
+                'idx_event_status_time'
+            );
         });
     }
 

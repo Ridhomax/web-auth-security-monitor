@@ -19,7 +19,8 @@ return new class extends Migration
                 $table->string('password');
                 $table->string('role', 40)->default('student');
                 $table->boolean('is_active')->default(true);
-                $table->timestamps();
+                $table->timestamp('created_at')->nullable()->useCurrent();
+                $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate();
             });
         }
     }

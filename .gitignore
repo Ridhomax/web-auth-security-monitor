@@ -39,3 +39,15 @@ Thumbs.db
 
 # Local migration backups
 database/migrations/*.bak
+
+
+# Local development backups
+*.bak
+*.bak-*
+database/migrations_backup_*/
+resources/views/*-backup.blade.php
+
+# Local database reconciliation scripts
+/migration_reconciliation_*.php
+public/css/*.backup.css
+public/css/*.backup.css
